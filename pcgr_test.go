@@ -101,4 +101,21 @@ func TestAdvance(t *testing.T) {
 	}
 }
 
+func TestCompat(t *testing.T) {
+
+	// from pcg32-demo
+	output := []uint32{
+		0xa15c02b7, 0x7b47f409, 0xba1d3330, 0x83d2f293, 0xbfa4784b, 0xcbed606e,
+	}
+
+	var rnd Rand
+	rnd.SeedWithState(42, 54)
+
+	for i, want := range output {
+		if n := rnd.Next(); n != want {
+			t.Errorf("failed step %d: got %d want %d", i, n, want)
+		}
+	}
+}
+
 var _ = rand.Source(&Rand{})
