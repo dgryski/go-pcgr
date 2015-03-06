@@ -68,4 +68,37 @@ func TestGenerate(t *testing.T) {
 	}
 }
 
+func TestAdvance(t *testing.T) {
+
+	rnd := Rand{0x0ddc0ffeebadf00d, 0xcafebabe}
+
+	var ints []uint32
+
+	for i := 0; i < 10; i++ {
+		ints = append(ints, rnd.Next())
+	}
+
+	rnd.Advance(-10)
+
+	for i := 0; i < 10; i++ {
+		if n := rnd.Next(); n != ints[i] {
+			t.Errorf("advance failed: step %d = %d, want %d\n", i, n, ints[i])
+		}
+	}
+
+	tmp := rnd
+
+	for i := 0; i < 100; i++ {
+		tmp.Next()
+	}
+
+	rnd.Advance(100)
+
+	for i := 0; i < 10; i++ {
+		if got, want := rnd.Next(), tmp.Next(); got != want {
+			t.Errorf("advance failed: step %d = %d, want %d\n", i, got, want)
+		}
+	}
+}
+
 var _ = rand.Source(&Rand{})

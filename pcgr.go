@@ -48,3 +48,27 @@ func (r *Rand) Int63() int64 {
 func (r *Rand) step() {
 	r.State = r.State*defaultMultiplier64 + (r.Inc | 1)
 }
+
+// Advance skips forward 'delta' steps in the stream.  Delta can be negative in which case the stream in rewound.
+func (r *Rand) Advance(delta int) {
+
+	udelta := uint64(delta)
+
+	curMult := uint64(defaultMultiplier64)
+	curPlus := r.Inc | 1
+
+	accMult := uint64(1)
+	accPlus := uint64(0)
+
+	for udelta > 0 {
+		if (udelta & 1) == 1 {
+			accMult *= curMult
+			accPlus = accPlus*curMult + curPlus
+		}
+		curPlus = (curMult + 1) * curPlus
+		curMult *= curMult
+		udelta /= 2
+	}
+
+	r.State = accMult*r.State + accPlus
+}
