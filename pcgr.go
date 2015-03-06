@@ -2,6 +2,7 @@
 /* http://www.pcg-random.org/ */
 package pcgr
 
+// Rand is a PCG random number generator.  It implements the rand.Source interface.
 type Rand struct {
 	State uint64
 	Inc   uint64
@@ -9,6 +10,7 @@ type Rand struct {
 
 const defaultMultiplier64 = 6364136223846793005
 
+// Next returns a random uint32
 func (r *Rand) Next() uint32 {
 
 	oldstate := r.State
@@ -22,6 +24,7 @@ func (r *Rand) Next() uint32 {
 	return (xorshifted >> rot) | (xorshifted << ((-rot) & 31))
 }
 
+// SeedWithState sets the internal state and sequence number of the rng
 func (r *Rand) SeedWithState(initstate, initseq int64) {
 	r.State = 0
 	r.Inc = uint64(initseq<<1) | 1
@@ -30,10 +33,12 @@ func (r *Rand) SeedWithState(initstate, initseq int64) {
 	r.step()
 }
 
+// Seed states the internal state of the rng
 func (r *Rand) Seed(seed int64) {
 	r.SeedWithState(seed, 0)
 }
 
+// Int63 returns a random 63-bit integer
 func (r *Rand) Int63() int64 {
 	n := int64(r.Next())<<32 | int64(r.Next())
 	n &= 0x7FFFFFFFFFFFFFFF
