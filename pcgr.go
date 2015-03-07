@@ -72,3 +72,14 @@ func (r *Rand) Advance(delta int) {
 
 	r.State = accMult*r.State + accPlus
 }
+
+// Bound returns a uniform integer 0..bound-1
+func (r *Rand) Bound(bound uint32) uint32 {
+	threshold := uint32(-int32(bound) % int32(bound))
+	for {
+		n := r.Next()
+		if n >= threshold {
+			return n % bound
+		}
+	}
+}
