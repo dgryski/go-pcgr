@@ -75,7 +75,7 @@ func (r *Rand) Advance(delta int) {
 
 // Bound returns a uniform integer 0..bound-1
 func (r *Rand) Bound(bound uint32) uint32 {
-	threshold := uint32(-int32(bound) % int32(bound))
+	threshold := -bound % bound
 	for {
 		n := r.Next()
 		if n >= threshold {
