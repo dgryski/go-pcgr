@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+
+	"github.com/lazybeaver/xorshift"
 )
 
 /*
@@ -214,6 +216,49 @@ func dealCards(r *Rand) [52]int {
 	}
 
 	return cards
+}
+
+var total uint32 = 0
+
+func BenchmarkPCGR(b *testing.B) {
+	rnd := Rand{0x0ddc0ffeebadf00d, 0xcafebabe}
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		total += rnd.Next()
+	}
+}
+
+func BenchmarkPCGR64(b *testing.B) {
+	rnd := Rand{0x0ddc0ffeebadf00d, 0xcafebabe}
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		total += rnd.Next() + rnd.Next()
+	}
+}
+
+func BenchmarkRand(b *testing.B) {
+
+	r := rand.New(rand.NewSource(0x0ddc0ffeebadf00d))
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		total += uint32(r.Int31())
+	}
+}
+func BenchmarkXorshift(b *testing.B) {
+
+	r := xorshift.NewXorShift64Star(0x0ddc0ffeebadf00d)
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		total += uint32(r.Next())
+	}
 }
 
 var _ = rand.Source(&Rand{})
