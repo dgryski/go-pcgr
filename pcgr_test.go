@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/lazybeaver/xorshift"
+	"github.com/enki/fastprng"
 )
 
 /*
@@ -253,6 +254,28 @@ func BenchmarkRand(b *testing.B) {
 func BenchmarkXorshift(b *testing.B) {
 
 	r := xorshift.NewXorShift64Star(0x0ddc0ffeebadf00d)
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		total += uint32(r.Next())
+	}
+}
+
+func BenchmarkMarc(b *testing.B) {
+
+	r := fastprng.NewMARC(0x0ddc0ffeebadf00d)
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		total += uint32(r.Next())
+	}
+}
+
+func BenchmarkMarcBB(b *testing.B) {
+
+	r := fastprng.NewMARCBB(0x0ddc0ffeebadf00d)
 
 	b.ResetTimer()
 
