@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 
 func TestGenerate(t *testing.T) {
 
-	rnd := Rand{0x0ddc0ffeebadf00d, 0xcafebabe}
+	rnd := Rand{0x0ddc0ffeebadf00d, 0xcafebabf}
 
 	// generated from the above reference C code
 	f, err := os.Open("testdata/numbers.txt")
@@ -75,7 +75,7 @@ func TestGenerate(t *testing.T) {
 
 func TestAdvance(t *testing.T) {
 
-	rnd := Rand{0x0ddc0ffeebadf00d, 0xcafebabe}
+	rnd := Rand{0x0ddc0ffeebadf00d, 0xcafebabf}
 
 	var ints []uint32
 
