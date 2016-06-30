@@ -5,7 +5,7 @@ package pcgr
 // Rand is a PCG random number generator.  It implements the rand.Source interface.
 type Rand struct {
 	State uint64
-	Inc   uint64
+	Inc   uint64 // must be odd
 }
 
 const defaultMultiplier64 = 6364136223846793005
@@ -34,7 +34,7 @@ func (r *Rand) Next() uint32 {
 // SeedWithState sets the internal state and sequence number of the rng
 func (r *Rand) SeedWithState(initstate, initseq int64) {
 	r.State = 0
-	r.Inc = uint64(initseq<<1) | 1
+	r.Inc = uint64(initseq<<1) | 1 // Inc will be made odd even if initseq is not
 	r.step()
 	r.State += uint64(initstate)
 	r.step()
@@ -53,7 +53,7 @@ func (r *Rand) Int63() int64 {
 }
 
 func (r *Rand) step() {
-	r.State = r.State*defaultMultiplier64 + (r.Inc | 1)
+	r.State = r.State*defaultMultiplier64 + r.Inc
 }
 
 // Advance skips forward 'delta' steps in the stream.  Delta can be negative in which case the stream in rewound.
