@@ -10,6 +10,13 @@ type Rand struct {
 
 const defaultMultiplier64 = 6364136223846793005
 
+// New returns an pcgr stream
+func New(seed, state int64) Rand {
+	var r Rand
+	r.SeedWithState(seed, state)
+	return r
+}
+
 // Next returns a random uint32
 func (r *Rand) Next() uint32 {
 

@@ -147,8 +147,7 @@ func TestCompat(t *testing.T) {
 		},
 	}
 
-	var rnd Rand
-	rnd.SeedWithState(42, 54)
+	rnd := New(42, 54)
 
 	for i, tt := range output {
 		nn := strings.Fields(tt.numbers)
