@@ -283,4 +283,15 @@ func BenchmarkMarcBB(b *testing.B) {
 	}
 }
 
+func BenchmarkMaD0_64(b *testing.B) {
+
+	r := fastprng.NewMaD0(0x0ddc0ffeebadf00d)
+
+	b.ResetTimer()
+
+	for i := 0; i < b.N; i++ {
+		total += uint32(r.Next())
+	}
+}
+
 var _ = rand.Source(&Rand{})
