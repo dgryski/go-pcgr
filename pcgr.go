@@ -52,6 +52,12 @@ func (r *Rand) Int63() int64 {
 	return n
 }
 
+func (r *Rand) Float32() float32 {
+	const MaxUint32 = 1<<32 - 1
+	f := float32(r.Next()) / float32(MaxUint32)
+	return f
+}
+
 func (r *Rand) step() {
 	r.State = r.State*defaultMultiplier64 + r.Inc
 }
