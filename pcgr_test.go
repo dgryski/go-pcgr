@@ -62,7 +62,7 @@ func TestGenerate(t *testing.T) {
 	var line int
 	for scanner.Scan() {
 		n := rnd.Next()
-		want, err := strconv.Atoi(scanner.Text())
+		want, err := strconv.ParseUint(scanner.Text(), 10, 64)
 		if err != nil {
 			t.Fatalf("unable to parse data line %d: %v\n", line, err)
 		}
